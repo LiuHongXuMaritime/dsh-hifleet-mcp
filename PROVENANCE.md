@@ -53,6 +53,12 @@
   （key `@local/dsh-hifleet-tools`），调用上面两条路由读写状态；React 来自宿主模块表。
 - 包名：本地 bundle 从 `@local/dsh-hifleet-mcp` 改名为 `@local/dsh-hifleet-tools`，
   以绕开长驻 Host 对旧安装路径的内存缓存（旧名会指向已删除目录）。
+- `cordis.patch.yml`（可移植性，2026-11-13 补做）：不再写死绝对路径——
+  `command` 用 `!!js 'process.execPath'`（DSH 自带的 Electron，配合
+  `ELECTRON_RUN_AS_NODE=1` 当 Node 运行；在纯 Node 启动的 DSH 下也自动等于 node），
+  `args` / `cwd` 用 `!!js` 从 Loader 的 `baseUrl` + `package.json` 的 name 计算
+  （`<profile>/node_modules/@local/dsh-hifleet-tools/server/main.mjs`）；
+  移动目录/换机器无需改文件，使用者也无需另装 Node.js。
 
 ## 校验摘要（SHA-256）
 
@@ -67,6 +73,6 @@ eccf56290dd890dbff6007efea0e2731adde38d82820d3ac17bd38e870502c0b  index.js
 c4bc2df2a7053cc770fa662b031bba46f390add0e3f919eef9543400543e6016  client.js
 3928c2751337534604beef7fb163ace607290c7d3dfaa6afa64c56e326ef3bc5  login.cmd
 d2d05f8fd8dd4a9b8a92d2aee22b65722a0f7f07a5e07cd8ef24c3f6432ce73f  package.json
-8f3a92098e47d71849103d39b66ebe74186e9840cc17267933e519081458e182  cordis.patch.yml
+769368357528ee73d0ef98b71d65d38aee4e4149ada9d96650c42dda63fdffde  cordis.patch.yml
 504311d39a8a0d57f80dff0b7e33ed14d5b872e5cdfbd97abb6519621bfcb232  locale/en.json
 ce184c984104156ec63a4bcc679038f8bb8df2248ddab427d91d14096540f13e  locale/zh.json

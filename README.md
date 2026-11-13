@@ -22,7 +22,7 @@ dsh-hifleet-mcp/
 ├── login.cmd               # Windows 双击登录入口（密码输入不回显）
 ├── index.js                # Host half：/dsh-hifleet/api/* 路由（凭据状态/保存/删除）
 ├── client.js               # 浏览器设置页：DSH 设置 → “HiFleet 账号”（纯 JS，无需构建）
-├── server/                 # 内置 Node MCP 服务器（零依赖，Node >= 20.19）
+├── server/                 # 内置 Node MCP 服务器（零依赖；默认复用 DSH 自带的 Electron 运行时）
 │   ├── main.mjs            # stdio JSON-RPC 服务
 │   ├── client.mjs          # HTTP / Cookie / mtk / 本地会话
 │   ├── env.mjs             # .env 读取
@@ -37,8 +37,8 @@ dsh-hifleet-mcp/
 本 bundle 是 profile 级插件。安装后**新建会话**即可看到 `mcp__hifleet__*` 工具。
 
 - 方式一（图形界面）：DSH → 插件管理 → 安装本地 bundle → 选择本目录。
-- 方式二（等价接口）：`plugin_manager` 的 `install_bundle`，target 填本目录绝对路径
-  `D:\Creeper2026\HiFleet\plugin\dsh-hifleet-mcp`。
+- 方式二（等价接口）：`plugin_manager` 的 `install_bundle`，target 填本目录的绝对路径
+  （不同机器填该机器上的路径即可，本 bundle 内部不依赖任何绝对路径）。
 
 安装后自检：
 
@@ -50,10 +50,21 @@ dsh-hifleet-mcp/
 > `@local/dsh-hifleet-tools`（更早的本地安装曾用 `@local/dsh-hifleet-mcp`，两者不同名）；
 > 安装/卸载请认准当前包名。
 
-### 移动目录后
+### 路径与运行时（可移植性）
 
-`cordis.patch.yml` 里的 `command` / `args` / `cwd` 是绝对路径。目录移动后修改这三处，
-再重新安装本 bundle 即可。Node 路径按本机实际位置填写（默认 `C:\Program Files\nodejs\node.exe`）。
+`cordis.patch.yml` 里**没有任何绝对路径**，所以：
+
+- 把本目录移动到任何位置（甚至换一台电脑/改名文件夹）都**不需要修改本文件**；
+- `command` 复用 DSH 自带的 Electron（搭配 `ELECTRON_RUN_AS_NODE=1`）当 Node 用，
+  因此**不要求使用者单独安装 Node.js**；
+- `args` / `cwd` 由 Loader 的 `!!js` 表达式在加载时算出：
+  `baseUrl`（当前 profile 目录）+ 包名（`package.json` 的 `name`）→
+  `<profile>/node_modules/@local/dsh-hifleet-tools/server/main.mjs`。
+
+只有在**改了 `package.json` 的 `name`**（例如 fork 后重命名包）时，才需要把
+`cordis.patch.yml` 中两处 `node_modules/@local/dsh-hifleet-tools` 换成新包名。
+如果更想用系统 Node（>= 20.19.0）：把 `command` 改成 `node`，并删掉 `env` 里的
+`ELECTRON_RUN_AS_NODE` 即可。
 
 ## 账号设置（推荐，DSH 图形界面）
 

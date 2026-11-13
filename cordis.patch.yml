@@ -4,8 +4,13 @@
 # @deepseek-ai/dsh-mcp-client 管理。工具发布名：mcp__hifleet__<原工具名>，
 # 例如 mcp__hifleet__hifleet_vessel。
 #
-# 注意：command / args / cwd 为绝对路径。若把本目录移动到其它位置，请同步
-# 修改下面三处路径，然后重新安装本 bundle。Node 版本要求 >= 20.19.0。
+# 本文件不含任何绝对路径：路径由 Loader 的 !!js 表达式在加载时算出
+# （baseUrl = 当前 profile 目录；包名取自 package.json 的 name），所以插件
+# 可以被安装到任何用户、任何磁盘位置，无需再改本文件。
+#
+# Node 运行时：直接复用 DSH 自带的 Electron（ELECTRON_RUN_AS_NODE=1），
+# 因此不要求系统安装 Node.js。如果更想用系统 Node，把 command 改为 node，
+# 并去掉 env 里的 ELECTRON_RUN_AS_NODE 即可（Node >= 20.19.0）。
 #
 # 登录：服务器启动时自动读取本目录下的 .env（模板见 .env.example），
 # 会话默认保存到 %USERPROFILE%\.hifleet\session.json。
@@ -17,10 +22,14 @@
       config:
         serverName: hifleet
         transport: stdio
-        command: 'C:\Program Files\nodejs\node.exe'
+        # 用 DSH 自带的 Electron 当 Node 用（Electron 44 内置 Node 24），
+        # 免去“使用者机器上必须装 Node”的要求。
+        command: !!js 'process.execPath'
         args:
-          - 'D:\Creeper2026\HiFleet\plugin\dsh-hifleet-mcp\server\main.mjs'
-        cwd: 'D:\Creeper2026\HiFleet\plugin\dsh-hifleet-mcp'
+          - !!js 'decodeURIComponent(new URL("node_modules/@local/dsh-hifleet-tools/server/main.mjs", baseUrl).pathname).replace(/^\/([A-Za-z]:)/, "$1")'
+        cwd: !!js 'decodeURIComponent(new URL("node_modules/@local/dsh-hifleet-tools/", baseUrl).pathname).replace(/^\/([A-Za-z]:)/, "$1")'
+        env:
+          ELECTRON_RUN_AS_NODE: '1'
         toolCallTimeoutMs: 120000
         failOnStartupError: true
 

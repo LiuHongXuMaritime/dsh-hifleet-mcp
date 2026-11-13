@@ -1,0 +1,713 @@
+{
+  "vessel": {
+    "doc": "reference/02-vessels.md",
+    "description": "船舶列表、搜索、档案、航次、挂靠、PSC、事故、风险、图片",
+    "actions": {
+      "search": {
+        "method": "POST",
+        "path": "/hifleetapi/searchVesselOLByMmsi.do",
+        "body": "form",
+        "defaults": { "groupName": "1", "i18n": "zh" },
+        "pick": ["n", "m", "i", "c", "t", "minotype", "an", "fn", "dn", "la", "lo", "sp", "co", "h", "s", "d", "e", "dr", "dwt", "l", "b", "ti", "updateTimeInfo", "timezone"]
+      },
+      "suggest": {
+        "method": "POST",
+        "path": "/hifleetapi/getShipSuggest.do",
+        "body": "form",
+        "defaults": { "type": "1" }
+      },
+      "same_search": {
+        "method": "POST",
+        "path": "/hifleetapi/sameShipSearch.do?dataType=json&_v=5.4.585",
+        "body": "form"
+      },
+      "list": {
+        "method": "POST",
+        "path": "/particulars/getShipDatav3",
+        "body": "json",
+        "defaults": { "offset": 0, "limit": 50, "_v": "5.3.588" }
+      },
+      "types": {
+        "method": "GET",
+        "path": "/particulars/getShipType",
+        "body": "query"
+      },
+      "my_fleet": {
+        "method": "GET",
+        "path": "/particulars/getShipByMyFleets",
+        "body": "query"
+      },
+      "archive": {
+        "method": "POST",
+        "path": "/hifleetapi/shiparchive/getbyimo.do",
+        "body": "form",
+        "defaults": { "_v": "5.3.703" },
+        "handler": "archive"
+      },
+      "current_voyage": {
+        "method": "POST",
+        "path": "/hifleetapi/getShipCurrentVoyageStatusAction.do",
+        "body": "form"
+      },
+      "current_voyage_poc": {
+        "method": "POST",
+        "path": "/portofcall/getshipcurrentvoyagestatus",
+        "body": "form",
+        "defaults": { "i18n": "zh" }
+      },
+      "port_calls": {
+        "method": "POST",
+        "path": "/portofcall/getpoc",
+        "body": "form",
+        "defaults": { "limit1": 0, "limit2": 10, "transfertolocaltime": 1, "accuracyval": 5 },
+        "format_time": ["starttime", "endtime"],
+        "rows": "data",
+        "pick": ["portname", "portcode", "country", "countryname", "arrivaltime", "departuretime", "starttime", "endtime", "draught", "stayhours", "berth", "anchorage", "voyage", "status"]
+      },
+      "history_voyages": {
+        "method": "POST",
+        "path": "/portofcall/queryvoyage",
+        "body": "form",
+        "defaults": { "offset": 0, "limit": 10, "accuracyval": 5 },
+        "format_time": ["starttime", "endtime"],
+        "rows": "list",
+        "pick": ["startport", "startportcnname", "startportcountryname", "startportinitialdraught", "startportrestartdraught", "starttime", "endport", "endportcnname", "endportcountryname", "draught", "endtime"]
+      },
+      "recent_calls": {
+        "method": "POST",
+        "path": "/portofcall/getrecentcall",
+        "body": "form",
+        "defaults": { "limit1": 0, "limit2": 5 }
+      },
+      "recent_calls_by_imo": {
+        "method": "POST",
+        "path": "/portofcall/getrecentcallbyimo",
+        "body": "form",
+        "defaults": { "limit1": 0, "limit2": 5 }
+      },
+      "voyage_speed_time": {
+        "method": "POST",
+        "path": "/portofcall/getrecentvoyagespeedtimearray",
+        "body": "form",
+        "format_time": ["starttime", "endtime"]
+      },
+      "stopped_places": {
+        "method": "POST",
+        "path": "/portofcall/get/shipstoppedplaceandtime",
+        "body": "form"
+      },
+      "psc": {
+        "method": "GET",
+        "path": "/particulars/psc/get",
+        "body": "query"
+      },
+      "psc_detail": {
+        "method": "GET",
+        "path": "/particulars/psc/getDetail",
+        "body": "query"
+      },
+      "casualty": {
+        "method": "GET",
+        "path": "/particulars/getCasualtyListByImo",
+        "body": "query"
+      },
+      "casualty_detail": {
+        "method": "GET",
+        "path": "/particulars/getCasualtyDetailByEventId",
+        "body": "query"
+      },
+      "risk": {
+        "method": "POST",
+        "path": "/shipdetail/getShipRisk",
+        "body": "form"
+      },
+      "sanction_risk": {
+        "method": "POST",
+        "path": "/shipdetail/sanction/assess/shiprisk",
+        "body": "form"
+      },
+      "abnormal": {
+        "method": "GET",
+        "path": "/shipdetail/getAbnormalDataByMmsi",
+        "body": "query"
+      },
+      "destination": {
+        "method": "POST",
+        "path": "/hifleetapi/getDestinationByMmsi.do",
+        "body": "form"
+      },
+      "images": {
+        "method": "POST",
+        "path": "/hifleetapi/getImageByMmsi.do",
+        "body": "form",
+        "defaults": { "nownum": 0, "limit": 1 },
+        "expect": "text"
+      },
+      "ship_images": {
+        "method": "POST",
+        "path": "/hifleetapi/getShipImageAction.do",
+        "body": "form"
+      },
+      "feature_xml": {
+        "method": "POST",
+        "path": "/hifleetapi/getShipsFeatureXml.do",
+        "body": "form",
+        "defaults": { "limit1": 0, "limit2": 1, "select_type": 5 },
+        "expect": "text"
+      },
+      "has_detail": {
+        "method": "POST",
+        "path": "/hifleetapi/hasshipdetail.do",
+        "body": "form",
+        "expect": "text"
+      },
+      "stop_ships": {
+        "method": "POST",
+        "path": "/hifleetapi/getStopShip.do",
+        "body": "form",
+        "defaults": { "select_type": 2, "limit1": 0, "limit2": 5 },
+        "expect": "text"
+      }
+    }
+  },
+
+  "track": {
+    "doc": "reference/04-track.md",
+    "description": "轨迹、停船点、全量船位、风场、吃水、SDK 位置与轨迹",
+    "actions": {
+      "trajectory": {
+        "method": "POST",
+        "path": "/hifleetapi/getShipsTrajectory.do?dataType=json&_v=5.3.731",
+        "body": "form",
+        "format_time": ["starttime", "endtime", "startdates", "endates"],
+        "handler": "trajectory"
+      },
+      "trajectory_envelop": {
+        "method": "POST",
+        "path": "/hifleetapi/getShipsTrajectoryEnvelop.do",
+        "body": "form",
+        "format_time": ["startdates", "enddates"]
+      },
+      "all_ships": {
+        "method": "POST",
+        "path": "/hifleetapi/getAllShpsJsonFacede.do",
+        "body": "form",
+        "defaults": { "_source": "web", "devSize": 10000, "xyz": 1 }
+      },
+      "all_ships_xyz": {
+        "method": "POST",
+        "path": "/hifleetapi/getAllShipsXYZ.do",
+        "body": "form",
+        "defaults": { "devSize": 10000, "xyz": 1 }
+      },
+      "stop_records": {
+        "method": "POST",
+        "path": "/hifleetapi/getShipStopRecord.do",
+        "body": "form",
+        "format_time": ["starttime", "endtime"]
+      },
+      "winds": {
+        "method": "POST",
+        "path": "/hifleetapi/getwinds.do",
+        "body": "form",
+        "format_time": ["starttime", "endtime"]
+      },
+      "vyg_draught": {
+        "method": "POST",
+        "path": "/hifleetapi/getvygdraught.do",
+        "body": "form"
+      },
+      "noon_position": {
+        "method": "POST",
+        "path": "/hifleetapi/gethmcnoonposition.do",
+        "body": "form"
+      },
+      "sdk_positions": {
+        "method": "GET",
+        "path": "/position/positions/get/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true
+      },
+      "sdk_trajectory": {
+        "method": "GET",
+        "path": "/position/trajectory/nocompressed/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true,
+        "format_time": ["starttime", "endtime"]
+      }
+    }
+  },
+
+  "route": {
+    "doc": "reference/05-route-weather.md",
+    "description": "气象航线、点到点、航线计划、沿航线气象、潮汐",
+    "actions": {
+      "weather": {
+        "method": "POST",
+        "path": "/hifleetrouteapi/getNewRouteForWeather?i18n=zh&_v=5.4.585",
+        "body": "form",
+        "defaults": { "wavevlue": 5, "speed": 10, "ecashortest": 1, "arcticroute": 1 },
+        "format_time": ["starttime"],
+        "handler": "route_weather"
+      },
+      "point_to_point": {
+        "method": "POST",
+        "path": "/hifleetrouteapi/GetPoint2PointRoute.do",
+        "body": "form"
+      },
+      "plan_routes": {
+        "method": "POST",
+        "path": "/hifleetapi/getroute.do",
+        "body": "form",
+        "defaults": { "limit1": 0, "limit2": 3 }
+      },
+      "save": {
+        "method": "POST",
+        "path": "/hifleetapi/saveRouteReturnJson.do",
+        "body": "form",
+        "write": true
+      },
+      "update": {
+        "method": "POST",
+        "path": "/hifleetapi/updateroute.do",
+        "body": "form",
+        "write": true
+      },
+      "delete": {
+        "method": "POST",
+        "path": "/hifleetapi/deleteRoutePlanAction.do",
+        "body": "form",
+        "write": true
+      },
+      "all_plans": {
+        "method": "POST",
+        "path": "/hifleetapi/getFleetsAllPlanRoutes.do",
+        "body": "form"
+      },
+      "recommend_destination": {
+        "method": "POST",
+        "path": "/recommendation/destination",
+        "body": "form"
+      },
+      "hangxian_date": {
+        "method": "POST",
+        "path": "/hifleetapi/getHangxianDate.do",
+        "body": "form"
+      },
+      "hangxian_wave": {
+        "method": "POST",
+        "path": "/hifleetapi/getHangxianWave.do",
+        "body": "form"
+      },
+      "hangxian_wind": {
+        "method": "POST",
+        "path": "/hifleetapi/getHangxianWind.do",
+        "body": "form"
+      },
+      "hangxian_weather": {
+        "method": "POST",
+        "path": "/hifleetapi/getHangxianWeatherDetail.do",
+        "body": "form",
+        "defaults": { "page": 1, "size": 100 }
+      },
+      "weather_values": {
+        "method": "POST",
+        "path": "/hifleetapi/getWeatherValueDetail.do",
+        "body": "form",
+        "defaults": { "page": 1, "size": 1000 },
+        "format_time": ["starttime", "endtime"]
+      },
+      "ship_weather": {
+        "method": "POST",
+        "path": "/hifleetapi/getWeather.do",
+        "body": "form",
+        "format_time": ["starttime", "endtime"]
+      },
+      "swell_direction": {
+        "method": "POST",
+        "path": "/hifleetapi/getRouteSwellDirection.do",
+        "body": "form"
+      },
+      "tide": {
+        "method": "POST",
+        "path": "/hifleetweatherapi/getTideDateforwechat.do",
+        "body": "form"
+      }
+    }
+  },
+
+  "port": {
+    "doc": "reference/06-port.md",
+    "description": "港口经纬度列表、在港/预抵、天气、详情、OneOcean、留言",
+    "actions": {
+      "list": {
+        "method": "GET",
+        "path": "/shipdetail/Portguide/indexPortList",
+        "body": "query",
+        "defaults": { "page": 1, "results": 50, "facility": "", "format": "json", "type": "allPorts" },
+        "handler": "port_list"
+      },
+      "status": {
+        "method": "GET",
+        "path": "/hifleetapi/getinportshipstatus.do",
+        "body": "query",
+        "handler": "port_status"
+      },
+      "weather": {
+        "method": "GET",
+        "path": "/hifleetapi/port/weather.do",
+        "body": "query",
+        "defaults": { "lang": "zh", "action": "getPortWeather" },
+        "handler": "port_weather"
+      },
+      "region": {
+        "method": "GET",
+        "path": "/shipdetail/Portguide/getRegion",
+        "body": "query"
+      },
+      "timezone": {
+        "method": "GET",
+        "path": "/shipdetail/Portguide/getTimezoneCountry",
+        "body": "query"
+      },
+      "detail": {
+        "method": "GET",
+        "path": "/shipdetail/Portguide/getPortByPiuid",
+        "body": "query"
+      },
+      "plan_image": {
+        "method": "GET",
+        "path": "/shipdetail/Portguide/getPortPlanImg",
+        "body": "query",
+        "defaults": { "format": "gif" },
+        "handler": "url"
+      },
+      "weather_alarm": {
+        "method": "GET",
+        "path": "/shipdetail/getWeatherAlarmDataByPortcode",
+        "body": "query"
+      },
+      "one_ocean_port": {
+        "method": "GET",
+        "path": "/shipdetail/OneOceanPorts/port/{locode}",
+        "body": "query"
+      },
+      "one_ocean_plans": {
+        "method": "GET",
+        "path": "/shipdetail/OneOceanPorts/port/{locode}/plans",
+        "body": "query"
+      },
+      "one_ocean_search": {
+        "method": "GET",
+        "path": "/shipdetail/OneOceanPorts/search",
+        "body": "query"
+      },
+      "one_ocean_section": {
+        "method": "GET",
+        "path": "/shipdetail/OneOceanPorts/port/{locode}/{section}",
+        "body": "query"
+      },
+      "sdk_ports": {
+        "method": "GET",
+        "path": "/port/getports/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true
+      },
+      "messages": {
+        "method": "GET",
+        "path": "/hifleetapi/userMessageListAction.do",
+        "body": "query",
+        "defaults": { "type": 3, "page": 1, "size": 10 }
+      },
+      "message_add": {
+        "method": "GET",
+        "path": "/hifleetapi/userMessageAddAction.do",
+        "body": "query",
+        "defaults": { "type": 3, "email": "public" },
+        "write": true
+      },
+      "message_delete": {
+        "method": "GET",
+        "path": "/hifleetapi/userMessageDeleteAction.do",
+        "body": "query",
+        "write": true
+      },
+      "message_edit": {
+        "method": "GET",
+        "path": "/hifleetapi/userMessageEditAction.do",
+        "body": "query",
+        "defaults": { "type": 3 },
+        "write": true
+      }
+    }
+  },
+
+  "schedule": {
+    "doc": "reference/07-schedules.md",
+    "description": "班期列表、详情、关注、统计、联想、准班率、解锁",
+    "actions": {
+      "list": {
+        "method": "GET",
+        "path": "/shipdetail/schedules/schedules",
+        "body": "query",
+        "defaults": { "scheduleType": "container", "page": 1, "pageSize": 10, "i18n": "zh" },
+        "rows": "data",
+        "pick": ["id", "company", "scheduleType", "openPortEta", "status", "dist", "dischargingDist", "callPorts", "callPortids"]
+      },
+      "detail": {
+        "method": "GET",
+        "path": "/shipdetail/schedules/schedules/detail",
+        "body": "query",
+        "defaults": { "i18n": "zh" }
+      },
+      "follows": {
+        "method": "GET",
+        "path": "/shipdetail/schedules/follows",
+        "body": "query"
+      },
+      "follow": {
+        "method": "POST",
+        "path": "/shipdetail/schedules/follows",
+        "body": "json",
+        "write": true
+      },
+      "stats": {
+        "method": "GET",
+        "path": "/shipdetail/schedules/stats",
+        "body": "query"
+      },
+      "port_suggest": {
+        "method": "GET",
+        "path": "/shipdetail/schedules/ports/suggest",
+        "body": "query",
+        "defaults": { "size": 8 }
+      },
+      "company_suggest": {
+        "method": "GET",
+        "path": "/shipdetail/schedules/companies/suggest",
+        "body": "query",
+        "defaults": { "scheduleType": "container", "size": 10, "i18n": "zh" }
+      },
+      "accuracy": {
+        "method": "GET",
+        "path": "/shipdetail/shippingScheduleAccuracy",
+        "body": "query"
+      },
+      "unlock_price": {
+        "method": "GET",
+        "path": "/shipdetail/order/unLockPayPointQueryPrice",
+        "body": "query",
+        "defaults": { "typeCode": "product_vessel_liner_charter", "i18n": "zh" }
+      },
+      "unlock": {
+        "method": "GET",
+        "path": "/shipdetail/order/unLockPayPoint",
+        "body": "query",
+        "defaults": { "typeCode": "product_vessel_liner_charter", "i18n": "zh" },
+        "write": true
+      },
+      "verify_captcha": {
+        "method": "POST",
+        "path": "/shipdetail/capture/verify",
+        "body": "form",
+        "defaults": { "i18n": "zh" }
+      }
+    }
+  },
+
+  "fleet": {
+    "doc": "reference/08-fleet-user.md",
+    "description": "船队船舶、分组、增删、登录状态、权限、船舶报告",
+    "actions": {
+      "ships": {
+        "method": "POST",
+        "path": "/hifleetapi/queryMyFleetsShips.do",
+        "body": "form",
+        "defaults": { "mmsis": "", "_source": "web" },
+        "handler": "fleet_ships"
+      },
+      "groups": {
+        "method": "POST",
+        "path": "/hifleetapi/getMyFleetsListAction.do",
+        "body": "form"
+      },
+      "add": {
+        "method": "POST",
+        "path": "/hifleetapi/addFleet2MultiGroup.do",
+        "body": "form",
+        "write": true
+      },
+      "remove": {
+        "method": "POST",
+        "path": "/hifleetapi/deleteFleetAndGroup.do",
+        "body": "form",
+        "defaults": { "id": 2 },
+        "write": true
+      },
+      "login_status": {
+        "method": "GET",
+        "path": "/hifleetapi/loginstatus.do",
+        "body": "query"
+      },
+      "logout": {
+        "method": "POST",
+        "path": "/hifleetapi/userLogOut.do",
+        "body": "form",
+        "handler": "logout"
+      },
+      "rights": {
+        "method": "POST",
+        "path": "/hifleetapi/getUserRightJson.do",
+        "body": "form"
+      },
+      "effective_auths": {
+        "method": "GET",
+        "path": "/service-auth/getUserEffectiveAuths",
+        "body": "query"
+      },
+      "report_query": {
+        "method": "POST",
+        "path": "/publicapi/vesselreport/query",
+        "body": "form",
+        "defaults": { "order": "desc", "offset": 0, "limit": 5 }
+      },
+      "report_types": {
+        "method": "POST",
+        "path": "/publicapi/vesselreport/list/types",
+        "body": "form"
+      },
+      "report_delete": {
+        "method": "POST",
+        "path": "/publicapi/vesselreport/delete",
+        "body": "form",
+        "write": true
+      }
+    }
+  },
+
+  "typhoon": {
+    "doc": "reference/09-typhoon.md",
+    "description": "台风、地震、海况矢量、海浪瓦片、SDK 海图",
+    "actions": {
+      "list": {
+        "method": "GET",
+        "path": "/typhoon/getcurrenttyphoonlist/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true
+      },
+      "positions": {
+        "method": "GET",
+        "path": "/typhoon/gettyphoonposition/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true
+      },
+      "forecast": {
+        "method": "GET",
+        "path": "/typhoon/gettyphoonforecast/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true
+      },
+      "earthquakes": {
+        "method": "GET",
+        "path": "/alertpoint/getrecemtearthquake/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true
+      },
+      "ocean_times": {
+        "method": "GET",
+        "path": "/oceanweather/getjsontimelist/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true
+      },
+      "ocean_values": {
+        "method": "GET",
+        "path": "/oceanweather/getjsonweathervalue/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true
+      },
+      "wind_vector": {
+        "method": "GET",
+        "path": "/oceanweather/windvector/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true
+      },
+      "current_vector": {
+        "method": "GET",
+        "path": "/oceanweather/currentvector/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true
+      },
+      "pressure_vector": {
+        "method": "GET",
+        "path": "/oceanweather/pressurevector/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true
+      },
+      "ocean_wave_url": {
+        "method": "GET",
+        "path": "/oceanweather/getoceanwavepng/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true,
+        "handler": "url"
+      },
+      "nautical_url": {
+        "method": "GET",
+        "path": "/nauticalmap/token",
+        "base": "sdk",
+        "body": "query",
+        "token": true,
+        "handler": "url"
+      }
+    }
+  },
+
+  "account": {
+    "doc": "reference/08-fleet-user.md",
+    "description": "本地会话、登录、登出、权限",
+    "actions": {
+      "status": {
+        "method": "GET",
+        "path": "/hifleetapi/loginstatus.do",
+        "body": "query",
+        "handler": "session"
+      },
+      "login": {
+        "method": "POST",
+        "path": "/hifleetapi/generalUserLoginAction.do",
+        "body": "form",
+        "write": true,
+        "handler": "login"
+      },
+      "logout": {
+        "method": "POST",
+        "path": "/hifleetapi/userLogOut.do",
+        "body": "form",
+        "write": true,
+        "handler": "logout"
+      },
+      "rights": {
+        "method": "POST",
+        "path": "/hifleetapi/getUserRightJson.do",
+        "body": "form"
+      },
+      "effective_auths": {
+        "method": "GET",
+        "path": "/service-auth/getUserEffectiveAuths",
+        "body": "query"
+      }
+    }
+  }
+}

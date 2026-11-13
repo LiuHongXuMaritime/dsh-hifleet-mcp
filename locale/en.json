@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "HiFleet Tools (Unofficial)",
+    "description": "Bundled HiFleet MCP server over stdio: vessel, track, route/weather, port, schedule, fleet, typhoon and account tools, exposed as mcp__hifleet__*."
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "HiFleet 工具（非官方）",
+    "description": "内置本地 HiFleet MCP 服务（stdio）：船舶、轨迹、航线气象、港口、班期、船队、台风与账号工具，发布名 mcp__hifleet__*。"
+  }
+}

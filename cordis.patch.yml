@@ -1,0 +1,31 @@
+# HiFleet Tools（非官方）—— DeepSeek Harness 接入声明（config-only bundle）
+#
+# 本 bundle 内置零依赖 Node MCP 服务器（server/main.mjs），通过 stdio 交给
+# @deepseek-ai/dsh-mcp-client 管理。工具发布名：mcp__hifleet__<原工具名>，
+# 例如 mcp__hifleet__hifleet_vessel。
+#
+# 注意：command / args / cwd 为绝对路径。若把本目录移动到其它位置，请同步
+# 修改下面三处路径，然后重新安装本 bundle。Node 版本要求 >= 20.19.0。
+#
+# 登录：服务器启动时自动读取本目录下的 .env（模板见 .env.example），
+# 会话默认保存到 %USERPROFILE%\.hifleet\session.json。
+# 不要把账号密码写进本文件（本文件随插件分发）。
+
+- insert:
+    - id: hifleet-mcp
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: hifleet
+        transport: stdio
+        command: 'C:\Program Files\nodejs\node.exe'
+        args:
+          - 'D:\Creeper2026\HiFleet\plugin\dsh-hifleet-mcp\server\main.mjs'
+        cwd: 'D:\Creeper2026\HiFleet\plugin\dsh-hifleet-mcp'
+        toolCallTimeoutMs: 120000
+        failOnStartupError: true
+
+    # 账号设置页的 Host half（client.js 的对应端）：设置页保存的
+    # username / password 落到 %USERPROFILE%\.hifleet\credentials.json，
+    # 供 MCP 服务器进程在下一次调用时自动登录（见 server/tools.mjs 的补丁）。
+    - id: hifleet-account
+      name: '@local/dsh-hifleet-tools'
